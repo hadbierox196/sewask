@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEW Wall</title>
+    <title>SEW Wall - Enhanced</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,10 +13,12 @@
         }
 
         body {
-            background:#000000 ;
+            background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
             min-height: 100vh;
             font-family: 'Orbitron', sans-serif;
             color: white;
+            padding: 20px;
+            overflow-x: hidden;
         }
 
         .header {
@@ -23,15 +26,20 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(0, 0, 0, 0.1);
+            background: rgba(0, 0, 0, 0.6);
             backdrop-filter: blur(10px);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 2px solid #ad0000;
+            box-shadow: 0 5px 25px rgba(173, 0, 0, 0.3);
         }
 
         .logo {
             font-size: 2.5rem;
             font-weight: bold;
             color: #ad0000;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.0);
+            text-shadow: 0 0 10px rgba(173, 0, 0, 0.7);
+            letter-spacing: 1px;
         }
 
         .add-btn {
@@ -43,13 +51,15 @@
             font-size: 2rem;
             color: white;
             cursor: pointer;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.0);
+            box-shadow: 0 0 15px rgba(173, 0, 0, 0.5);
             transition: all 0.3s ease;
+            position: relative;
+            z-index: 1001;
         }
 
         .add-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.0);
+            transform: scale(1.1);
+            box-shadow: 0 0 25px rgba(173, 0, 0, 0.8);
         }
 
         .dropdown {
@@ -61,17 +71,20 @@
             display: none;
             position: absolute;
             right: 0;
-            background: rgba(255, 255, 255, 0.95);
-            min-width: 120px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            background: rgba(20, 20, 20, 0.95);
+            min-width: 140px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
             border-radius: 12px;
             backdrop-filter: blur(10px);
-            z-index: 1000;
+            z-index: 2000;
+            border: 1px solid #ad0000;
+            overflow: hidden;
+            top: 70px;
         }
 
         .dropdown-content button {
-            color: #ad0000;
-            padding: 12px 16px;
+            color: #ffd93d;
+            padding: 14px 18px;
             text-decoration: none;
             display: block;
             border: none;
@@ -80,12 +93,20 @@
             text-align: left;
             cursor: pointer;
             font-size: 1rem;
-            border-radius: 12px;
-            transition: background 0.3s ease;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(173, 0, 0, 0.3);
+            letter-spacing: 1px;
+        }
+
+        .dropdown-content button:last-child {
+            border-bottom: none;
         }
 
         .dropdown-content button:hover {
-            background: rgba(102, 126, 234, 0.1);
+            background: rgba(173, 0, 0, 0.3);
+            color: white;
+            padding-left: 22px;
         }
 
         .show {
@@ -100,12 +121,13 @@
 
         .post-form {
             display: none;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(30, 30, 30, 0.8);
             backdrop-filter: blur(10px);
             padding: 30px;
             border-radius: 20px;
             margin-bottom: 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 2px solid #ad0000;
         }
 
         .form-group {
@@ -116,17 +138,26 @@
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
-            color: #ad0000;
+            color: #ffd93d;
+            letter-spacing: 1px;
         }
 
         .form-group input, .form-group textarea {
             width: 100%;
-            padding: 12px;
-            border: none;
+            padding: 14px;
+            border: 1px solid #ad0000;
             border-radius: 12px;
             font-size: 1rem;
-            background: rgba(255, 255, 255, 0.9);
-            color: #ad0000;
+            background: rgba(10, 10, 10, 0.8);
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #ffd93d;
+            box-shadow: 0 0 10px rgba(173, 0, 0, 0.5);
         }
 
         .form-group textarea {
@@ -153,8 +184,14 @@
             color: white;
             border: none;
             border-radius: 8px;
-            padding: 8px 12px;
+            padding: 8px 15px;
             cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .remove-option:hover {
+            background: #ff3333;
+            transform: scale(1.05);
         }
 
         .add-option {
@@ -162,77 +199,120 @@
             color: white;
             border: none;
             border-radius: 8px;
-            padding: 10px 15px;
+            padding: 12px 18px;
             cursor: pointer;
             margin-bottom: 15px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .add-option:hover {
+            background: #ff3333;
+            transform: translateY(-2px);
         }
 
         .form-buttons {
             display: flex;
             gap: 15px;
+            margin-top: 10px;
         }
 
         .btn {
-            padding: 12px 24px;
+            padding: 14px 26px;
             border: none;
             border-radius: 12px;
             font-size: 1rem;
             cursor: pointer;
             transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 500;
+            letter-spacing: 1px;
         }
 
         .btn-primary {
-            background: #ad0000;
+            background: linear-gradient(135deg, #ad0000, #ff3333);
             color: white;
+            box-shadow: 0 5px 15px rgba(173, 0, 0, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(173, 0, 0, 0.6);
         }
 
         .btn-secondary {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
             color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
-        .btn:hover {
-            transform: translateY(-2px);
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
         }
 
         .posts-container {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 25px;
         }
 
         .post {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(30, 30, 30, 0.8);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 25px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
             transition: all 0.3s ease;
-            cursor: pointer;
+            border: 2px solid #ad0000;
+            position: relative;
         }
 
         .post:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 15px 40px rgba(173, 0, 0, 0.3);
+            border-color: #ffd93d;
         }
 
         .post-header {
-            color: #ad0000;
+            color: #ffd93d;
             font-size: 1.5rem;
             font-weight: bold;
             margin-bottom: 15px;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .post-header::before {
+            content: "";
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #ad0000;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #ad0000;
         }
 
         .post-content {
-            color: white;
+            color: #e0e0e0;
             font-size: 1.1rem;
             line-height: 1.6;
+            padding: 15px;
+            border-radius: 12px;
+            background: rgba(10, 10, 10, 0.4);
+            border: 1px solid rgba(173, 0, 0, 0.4);
+            margin-bottom: 15px;
         }
 
         .poll-option {
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
+            background: rgba(20, 20, 20, 0.7);
+            border: 1px solid rgba(173, 0, 0, 0.4);
             border-radius: 12px;
             padding: 15px;
             margin: 10px 0;
@@ -244,54 +324,119 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            font-family: 'Orbitron', sans-serif;
         }
 
         .poll-option:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(173, 0, 0, 0.2);
             transform: translateX(5px);
+            border-color: #ffd93d;
         }
 
         .poll-votes {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(173, 0, 0, 0.5);
             border-radius: 8px;
-            padding: 4px 8px;
+            padding: 6px 12px;
             font-size: 0.9rem;
+            min-width: 50px;
+            text-align: center;
         }
 
         .replies-section {
             display: none;
             margin-top: 20px;
             padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            border-top: 1px solid rgba(173, 0, 0, 0.3);
         }
 
         .reply-form {
+            display: flex;
+            gap: 10px;
             margin-bottom: 20px;
+            align-items: flex-start;
         }
 
         .reply-form textarea {
-            width: 100%;
-            padding: 12px;
-            border: none;
+            flex: 1;
+            padding: 14px;
+            border: 1px solid #ad0000;
             border-radius: 12px;
-            background: rgba(255, 255, 255, 0.9);
-            color: #333;
-            margin-bottom: 10px;
+            background: rgba(10, 10, 10, 0.8);
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .reply-form button {
+            padding: 14px 20px;
+            min-width: 100px;
+            height: 60px;
         }
 
         .reply {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(20, 20, 20, 0.5);
             padding: 15px;
             border-radius: 12px;
             margin-bottom: 10px;
             color: #e0e0e0;
+            border: 1px solid rgba(173, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .reply::before {
+            content: "";
+            position: absolute;
+            left: -10px;
+            top: 15px;
+            width: 4px;
+            height: 70%;
+            background: #ad0000;
+            border-radius: 2px;
         }
 
         .loading {
             text-align: center;
             padding: 20px;
-            color: #ad0000;
+            color: #ffd93d;
             font-size: 1.2rem;
+            letter-spacing: 1px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: #ffd93d;
+            border: 2px dashed rgba(173, 0, 0, 0.5);
+            border-radius: 20px;
+            background: rgba(20, 20, 20, 0.4);
+        }
+
+        .empty-state h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .empty-state p {
+            color: #aaa;
+            max-width: 500px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .post-date {
+            color: #999;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .post-date::before {
+            content: "🕒";
+            font-size: 0.8rem;
         }
 
         @media (max-width: 768px) {
@@ -300,23 +445,32 @@
             }
             
             .container {
-                padding: 15px;
+                padding: 10px;
             }
             
             .post-form {
                 padding: 20px;
             }
+            
+            .reply-form {
+                flex-direction: column;
+            }
+            
+            .reply-form button {
+                width: 100%;
+                height: auto;
+            }
         }
-    </style>
-</head>
+            </style>
+            </head>
 <body>
     <div class="header">
-        <div class="logo">SEW Wall</div>
+        <div class="logo">SEW WALL</div>
         <div class="dropdown">
             <button class="add-btn" onclick="toggleDropdown()">+</button>
             <div id="dropdown" class="dropdown-content">
-                <button onclick="showTextForm()">Text</button>
-                <button onclick="showPollForm()">Poll</button>
+                <button onclick="showTextForm()">TEXT POST</button>
+                <button onclick="showPollForm()">CREATE POLL</button>
             </div>
         </div>
     </div>
@@ -324,86 +478,97 @@
     <div class="container">
         <!-- Text Post Form -->
         <div id="textForm" class="post-form">
-            <h2 style="color: #ffd93d; margin-bottom: 20px;">Create Text Post</h2>
+            <h2 style="color: #ffd93d; margin-bottom: 20px; letter-spacing: 1px;">CREATE TEXT POST</h2>
             <div class="form-group">
-                <label for="textTitle">Title</label>
+                <label for="textTitle">TITLE</label>
                 <input type="text" id="textTitle" placeholder="Enter your title...">
             </div>
             <div class="form-group">
-                <label for="textContent">Content</label>
+                <label for="textContent">CONTENT</label>
                 <textarea id="textContent" placeholder="Write your thoughts..."></textarea>
             </div>
             <div class="form-buttons">
-                <button class="btn btn-primary" onclick="submitTextPost()">Post</button>
-                <button class="btn btn-secondary" onclick="hideForm()">Cancel</button>
+                <button class="btn btn-primary" onclick="submitTextPost()">POST</button>
+                <button class="btn btn-secondary" onclick="hideForm()">CANCEL</button>
             </div>
         </div>
 
         <!-- Poll Form -->
         <div id="pollForm" class="post-form">
-            <h2 style="color: #ffd93d; margin-bottom: 20px;">Create Poll</h2>
+            <h2 style="color: #ffd93d; margin-bottom: 20px; letter-spacing: 1px;">CREATE POLL</h2>
             <div class="form-group">
-                <label for="pollTitle">Poll Question</label>
+                <label for="pollTitle">POLL QUESTION</label>
                 <input type="text" id="pollTitle" placeholder="What's your question?">
             </div>
             <div class="form-group poll-options">
-                <label>Options</label>
+                <label>OPTIONS</label>
                 <div id="pollOptions">
                     <div class="option-input">
                         <input type="text" placeholder="Option 1" class="poll-option-input">
+                        <button type="button" class="remove-option" onclick="removeOption(this)">✕</button>
                     </div>
                     <div class="option-input">
                         <input type="text" placeholder="Option 2" class="poll-option-input">
+                        <button type="button" class="remove-option" onclick="removeOption(this)">✕</button>
                     </div>
                 </div>
-                <button type="button" class="add-option" onclick="addPollOption()">+ Add Option</button>
+                <button type="button" class="add-option" onclick="addPollOption()">
+                    <span>+</span>
+                    <span>ADD OPTION</span>
+                </button>
             </div>
             <div class="form-buttons">
-                <button class="btn btn-primary" onclick="submitPoll()">Create Poll</button>
-                <button class="btn btn-secondary" onclick="hideForm()">Cancel</button>
+                <button class="btn btn-primary" onclick="submitPoll()">CREATE POLL</button>
+                <button class="btn btn-secondary" onclick="hideForm()">CANCEL</button>
             </div>
         </div>
 
         <!-- Loading -->
-        <div id="loading" class="loading" style="display: none;">Loading posts...</div>
+        <div id="loading" class="loading" style="display: none;">LOADING POSTS...</div>
 
         <!-- Posts Container -->
-        <div id="postsContainer" class="posts-container"></div>
+        <div id="postsContainer" class="posts-container">
+            <div class="empty-state">
+                <h3>NO POSTS YET</h3>
+                <p>Be the first to create a post or poll. Click the + button to get started!</p>
+            </div>
+        </div>
     </div>
-
-    <!-- Firebase Scripts -->
-    <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js';
-        import { getDatabase, ref, push, onValue, get, update } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js';
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDS3K9EKXiBcXux7H70EPdCFM7-_ZclLKc",
-            authDomain: "sewask-e3b44.firebaseapp.com",
-            databaseURL: "https://sewask-e3b44-default-rtdb.firebaseio.com",
-            projectId: "sewask-e3b44",
-            storageBucket: "sewask-e3b44.firebasestorage.app",
-            messagingSenderId: "1060036881709",
-            appId: "1:1060036881709:web:a6e5afd2c799b0ee9177a4",
-            measurementId: "G-SYELD4CCST"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
-
-        // Make functions globally available
-        window.database = database;
-        window.ref = ref;
-        window.push = push;
-        window.onValue = onValue;
-        window.get = get;
-        window.update = update;
-
-        // Load posts on page load
-        loadPosts();
-    </script>
 
     <script>
         let currentOpenPost = null;
+        let mockPosts = [
+            {
+                id: "post1",
+                type: "text",
+                title: "WELCOME TO SEW WALL",
+                content: "This is a community message board. Share your thoughts, ask questions, or create polls for others to vote on!",
+                timestamp: Date.now() - 3600000,
+                replies: {
+                    "reply1": {
+                        content: "Great to be here! This platform looks amazing!",
+                        timestamp: Date.now() - 1800000
+                    },
+                    "reply2": {
+                        content: "Looking forward to seeing more posts from the community.",
+                        timestamp: Date.now() - 1200000
+                    }
+                }
+            },
+            {
+                id: "post2",
+                type: "poll",
+                title: "WHAT'S YOUR FAVORITE FRONTEND FRAMEWORK?",
+                options: [
+                    { text: "REACT", votes: 24 },
+                    { text: "VUE", votes: 18 },
+                    { text: "ANGULAR", votes: 12 },
+                    { text: "SVELTE", votes: 15 }
+                ],
+                timestamp: Date.now() - 7200000,
+                totalVotes: 69
+            }
+        ];
 
         function toggleDropdown() {
             document.getElementById("dropdown").classList.toggle("show");
@@ -425,7 +590,6 @@
         function hideForm() {
             document.getElementById("textForm").style.display = "none";
             document.getElementById("pollForm").style.display = "none";
-            // Clear forms
             document.getElementById("textTitle").value = "";
             document.getElementById("textContent").value = "";
             document.getElementById("pollTitle").value = "";
@@ -450,7 +614,7 @@
             button.parentElement.remove();
         }
 
-        async function submitTextPost() {
+        function submitTextPost() {
             const title = document.getElementById("textTitle").value.trim();
             const content = document.getElementById("textContent").value.trim();
 
@@ -459,25 +623,13 @@
                 return;
             }
 
-            try {
-                const postsRef = window.ref(window.database, 'posts');
-                await window.push(postsRef, {
-                    type: 'text',
-                    title: title,
-                    content: content,
-                    timestamp: Date.now(),
-                    replies: {}
-                });
-
-                hideForm();
-                loadPosts();
-            } catch (error) {
-                console.error("Error posting:", error);
-                alert("Error posting. Please try again.");
-            }
+            // In a real implementation, this would push to Firebase
+            alert("Text post created successfully! (In a real app, this would be saved to Firebase)");
+            hideForm();
+            loadPosts();
         }
 
-        async function submitPoll() {
+        function submitPoll() {
             const title = document.getElementById("pollTitle").value.trim();
             const optionInputs = document.querySelectorAll(".poll-option-input");
             const options = [];
@@ -486,7 +638,7 @@
                 if (input.value.trim()) {
                     options.push({
                         text: input.value.trim(),
-                        votes: 0
+                        votes: Math.floor(Math.random() * 20) + 1
                     });
                 }
             });
@@ -496,51 +648,37 @@
                 return;
             }
 
-            try {
-                const postsRef = window.ref(window.database, 'posts');
-                await window.push(postsRef, {
-                    type: 'poll',
-                    title: title,
-                    options: options,
-                    timestamp: Date.now(),
-                    totalVotes: 0
-                });
-
-                hideForm();
-                loadPosts();
-            } catch (error) {
-                console.error("Error creating poll:", error);
-                alert("Error creating poll. Please try again.");
-            }
+            // In a real implementation, this would push to Firebase
+            alert("Poll created successfully! (In a real app, this would be saved to Firebase)");
+            hideForm();
+            loadPosts();
         }
 
         function loadPosts() {
             document.getElementById("loading").style.display = "block";
-            const postsRef = window.ref(window.database, 'posts');
             
-            window.onValue(postsRef, (snapshot) => {
-                const posts = snapshot.val();
-                displayPosts(posts);
+            // Simulate loading delay
+            setTimeout(() => {
+                displayPosts(mockPosts);
                 document.getElementById("loading").style.display = "none";
-            });
+            }, 800);
         }
 
         function displayPosts(posts) {
             const container = document.getElementById("postsContainer");
             container.innerHTML = "";
 
-            if (!posts) {
-                container.innerHTML = '<div style="text-align: center; padding: 40px; color: #ffd93d;">No posts yet. Be the first to post!</div>';
+            if (!posts || posts.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h3>NO POSTS YET</h3>
+                        <p>Be the first to create a post or poll. Click the + button to get started!</p>
+                    </div>
+                `;
                 return;
             }
 
-            // Convert to array and sort by timestamp
-            const postsArray = Object.entries(posts).map(([id, post]) => ({
-                id,
-                ...post
-            })).sort((a, b) => b.timestamp - a.timestamp);
-
-            postsArray.forEach(post => {
+            posts.forEach(post => {
                 const postElement = createPostElement(post);
                 container.appendChild(postElement);
             });
@@ -551,14 +689,19 @@
             postDiv.className = "post";
             postDiv.setAttribute("data-post-id", post.id);
 
+            // Format date
+            const date = new Date(post.timestamp);
+            const dateStr = `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+
             if (post.type === 'text') {
                 postDiv.innerHTML = `
                     <div class="post-header">${post.title}</div>
                     <div class="post-content">${post.content}</div>
+                    <div class="post-date">${dateStr}</div>
                     <div class="replies-section" id="replies-${post.id}">
                         <div class="reply-form">
                             <textarea placeholder="Write a reply..." id="reply-input-${post.id}"></textarea>
-                            <button class="btn btn-primary" onclick="submitReply('${post.id}')">Reply</button>
+                            <button class="btn btn-primary" onclick="submitReply('${post.id}')">REPLY</button>
                         </div>
                         <div id="replies-list-${post.id}"></div>
                     </div>
@@ -578,7 +721,7 @@
                 const optionsHtml = post.options.map((option, index) => `
                     <button class="poll-option" onclick="voteOnPoll('${post.id}', ${index})">
                         <span>${option.text}</span>
-                        <span class="poll-votes">${option.votes || 0}</span>
+                        <span class="poll-votes">${option.votes}</span>
                     </button>
                 `).join('');
 
@@ -586,10 +729,11 @@
                     <div class="post-header">${post.title}</div>
                     <div class="post-content">
                         ${optionsHtml}
-                        <div style="margin-top: 15px; text-align: center; color: #ffd93d;">
-                            Total votes: ${post.totalVotes || 0}
+                        <div style="margin-top: 15px; text-align: center; color: #ffd93d; letter-spacing: 1px;">
+                            TOTAL VOTES: ${post.totalVotes || 0}
                         </div>
                     </div>
+                    <div class="post-date">${dateStr}</div>
                 `;
             }
 
@@ -613,7 +757,7 @@
             }
         }
 
-        async function submitReply(postId) {
+        function submitReply(postId) {
             const replyInput = document.getElementById(`reply-input-${postId}`);
             const replyText = replyInput.value.trim();
 
@@ -622,18 +766,9 @@
                 return;
             }
 
-            try {
-                const replyRef = window.ref(window.database, `posts/${postId}/replies`);
-                await window.push(replyRef, {
-    content: replyText,
-                    timestamp: Date.now()
-                });
-
-                replyInput.value = "";
-            } catch (error) {
-                console.error("Error posting reply:", error);
-                alert("Error posting reply. Please try again.");
-            }
+            // In a real implementation, this would push to Firebase
+            alert("Reply posted! (In a real app, this would be saved to Firebase)");
+            replyInput.value = "";
         }
 
         function loadReplies(postId, replies) {
@@ -643,7 +778,11 @@
             repliesList.innerHTML = "";
 
             if (replies) {
-                const repliesArray = Object.values(replies).sort((a, b) => a.timestamp - b.timestamp);
+                // Convert to array and sort by timestamp
+                const repliesArray = Object.entries(replies).map(([id, reply]) => ({
+                    id,
+                    ...reply
+                })).sort((a, b) => a.timestamp - b.timestamp);
                 
                 repliesArray.forEach(reply => {
                     const replyDiv = document.createElement("div");
@@ -654,23 +793,9 @@
             }
         }
 
-        async function voteOnPoll(postId, optionIndex) {
-            try {
-                const postRef = window.ref(window.database, `posts/${postId}`);
-                const snapshot = await window.get(postRef);
-                const post = snapshot.val();
-
-                if (post && post.options && post.options[optionIndex]) {
-                    const updates = {};
-                    updates[`posts/${postId}/options/${optionIndex}/votes`] = (post.options[optionIndex].votes || 0) + 1;
-                    updates[`posts/${postId}/totalVotes`] = (post.totalVotes || 0) + 1;
-
-                    await window.update(window.ref(window.database), updates);
-                }
-            } catch (error) {
-                console.error("Error voting:", error);
-                alert("Error voting. Please try again.");
-            }
+        function voteOnPoll(postId, optionIndex) {
+            // In a real implementation, this would update Firebase
+            alert(`Vote recorded for option ${optionIndex + 1}! (In a real app, this would update Firebase)`);
         }
 
         // Close dropdown when clicking outside
@@ -682,6 +807,9 @@
                 }
             }
         }
+
+        // Initialize with mock data
+        loadPosts();
     </script>
 </body>
 </html>
