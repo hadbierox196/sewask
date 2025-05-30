@@ -777,6 +777,19 @@
                 }
             }
         }
+        document.addEventListener("DOMContentLoaded", () => {
+  const profileImg = document.querySelector('.profile-image');
+  const dropdown = document.querySelector('.dropdown-content');
+
+  profileImg.addEventListener('click', (e) => {
+    e.stopPropagation();
+    dropdown.classList.toggle('show');
+  });
+
+  window.addEventListener('click', () => {
+    dropdown.classList.remove('show');
+  });
+});
     </script>
 </body>
 </html>
