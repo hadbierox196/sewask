@@ -31,15 +31,15 @@
         }
 
         .logo {
-            font-size: 2.5rem;
+            font-size: 1.25rem;
             font-weight: 900;
             color: #ff0000;
             text-shadow: 2px 2px 4px rgba(255, 0, 0, 0.3);
         }
 
         .add-btn {
-            width: 60px;
-            height: 60px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             background: #ff0000;
             border: 2px solid #ff0000;
@@ -66,12 +66,12 @@
     position: absolute;
     right: 0;
     background: rgba(0, 0, 0, 0.95);
-    min-width: 120px;
+    min-width: 60px;
     box-shadow: 0 8px 16px rgba(255, 0, 0, 0.3);
-    border-radius: 12px;
+    border-radius: 6px;
     border: 2px solid #ff0000;
     backdrop-filter: blur(10px);
-    z-index: -1; /* Hide below everything by default */
+    z-index: 10000; /* Hide below everything by default */
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.2s ease;
@@ -383,8 +383,8 @@
         <div class="dropdown">
             <button class="add-btn" onclick="toggleDropdown()">+</button>
             <div id="dropdown" class="dropdown-content">
-                <button onclick="showTextForm()">📝 Text</button>
-                <button onclick="showPollForm()">📊 Poll</button>
+                <button onclick="showTextForm()">Text</button>
+                <button onclick="showPollForm()">Poll</button>
             </div>
         </div>
     </div>
