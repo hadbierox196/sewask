@@ -12,9 +12,9 @@
         }
 
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background:#000000 ;
             min-height: 100vh;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Orbitron', sans-serif;
             color: white;
         }
 
@@ -30,26 +30,26 @@
         .logo {
             font-size: 2.5rem;
             font-weight: bold;
-            color: #ff6b6b;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            color: #ad0000;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.0);
         }
 
         .add-btn {
             width: 60px;
             height: 60px;
             border-radius: 50%;
-            background: linear-gradient(45deg, #ff6b6b, #ffd93d);
+            background: #FFFFFF;
             border: none;
             font-size: 2rem;
             color: white;
             cursor: pointer;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.0);
             transition: all 0.3s ease;
         }
 
         .add-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.0);
         }
 
         .dropdown {
@@ -70,7 +70,7 @@
         }
 
         .dropdown-content button {
-            color: #333;
+            color: #ff6b6b;
             padding: 12px 16px;
             text-decoration: none;
             display: block;
@@ -116,7 +116,7 @@
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
-            color: #ffd93d;
+            color: #ad0000;
         }
 
         .form-group input, .form-group textarea {
@@ -126,7 +126,7 @@
             border-radius: 12px;
             font-size: 1rem;
             background: rgba(255, 255, 255, 0.9);
-            color: #333;
+            color: #ad0000;
         }
 
         .form-group textarea {
@@ -149,7 +149,7 @@
         }
 
         .remove-option {
-            background: #ff6b6b;
+            background: #ad0000;
             color: white;
             border: none;
             border-radius: 8px;
@@ -158,7 +158,7 @@
         }
 
         .add-option {
-            background: #4ecdc4;
+            background: #ad0000;
             color: white;
             border: none;
             border-radius: 8px;
@@ -182,7 +182,7 @@
         }
 
         .btn-primary {
-            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            background: #ad0000;
             color: white;
         }
 
@@ -217,7 +217,7 @@
         }
 
         .post-header {
-            color: #ff6b6b;
+            color: #ad0000;
             font-size: 1.5rem;
             font-weight: bold;
             margin-bottom: 15px;
@@ -290,7 +290,7 @@
         .loading {
             text-align: center;
             padding: 20px;
-            color: #ffd93d;
+            color: #ad0000;
             font-size: 1.2rem;
         }
 
@@ -315,8 +315,8 @@
         <div class="dropdown">
             <button class="add-btn" onclick="toggleDropdown()">+</button>
             <div id="dropdown" class="dropdown-content">
-                <button onclick="showTextForm()">📝 Text</button>
-                <button onclick="showPollForm()">📊 Poll</button>
+                <button onclick="showTextForm()">Text</button>
+                <button onclick="showPollForm()">Poll</button>
             </div>
         </div>
     </div>
