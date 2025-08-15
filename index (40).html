@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEW Ask</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        
+        /* Added CSS variables for theme colors and smooth scrolling */
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: rgba(255, 0, 0, 0.1);
+            --bg-tertiary: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #000000;
+            --accent-primary: #ff0000;
+            --accent-secondary: #cc0000;
+            --accent-tertiary: #ffd93d;
+            --border-color: #ff0000;
+            --shadow-color: rgba(255, 0, 0, 0.3);
+            --backdrop-blur: blur(10px);
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: rgba(255, 0, 0, 0.05);
+            --bg-tertiary: rgba(0, 0, 0, 0.05);
+            --text-primary: #000000;
+            --text-secondary: #ffffff;
+            --accent-primary: #dc2626;
+            --accent-secondary: #b91c1c;
+            --accent-tertiary: #d97706;
+            --border-color: #dc2626;
+            --shadow-color: rgba(220, 38, 38, 0.2);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg-primary);
+            min-height: 100vh;
+            font-family: 'Orbitron', monospace;
+            color: var(--text-primary);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            /* Added watermark background */
+            position: relative;
+        }
+
+        /* Modified watermark logo styling to change colors based on theme */
+        .watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.08;
+            z-index: 0;
+            pointer-events: none;
+            width: 300px;
+            height: 300px;
+            background-image: url('https://i.postimg.cc/KvcvKf63/Screenshot-2025-08-03-16-21-53-365-com-vblast-flipaclip.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            transition: all 0.3s ease;
+            filter: invert(1) brightness(0); /* Makes logo black in dark theme */
+        }
+
+        [data-theme="light"] .watermark {
+            opacity: 0.12;
+            filter: invert(0) brightness(1); /* Makes logo white in light theme */
+        }
+
+        /* Added subtle animated background pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(255, 0, 0, 0.02) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 0, 0, 0.02) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.01) 0%, transparent 50%);
+            z-index: 0;
+            pointer-events: none;
+            animation: backgroundShift 20s ease-in-out infinite;
+        }
+
+        @keyframes backgroundShift {
+            0%, 100% { transform: translateX(0) translateY(0); }
+            25% { transform: translateX(-10px) translateY(-5px); }
+            50% { transform: translateX(5px) translateY(-10px); }
+            75% { transform: translateX(-5px) translateY(5px); }
+        }
+
+        .header {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-secondary);
+            backdrop-filter: var(--backdrop-blur);
+            border-bottom: 2px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: all 0.3s ease;
+            /* Enhanced header with subtle glow effect */
+            box-shadow: 0 2px 20px var(--shadow-color);
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 900;
+            color: var(--accent-primary);
+            text-shadow: 2px 2px 4px var(--shadow-color);
+            transition: all 0.3s ease;
+            /* Added subtle animation to logo */
+            position: relative;
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-primary);
+            transition: width 0.3s ease;
+        }
+
+        .logo:hover::after {
+            width: 100%;
+        }
+
+        /* Added header controls container for theme toggle and add button */
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* Added theme toggle button */
+        .theme-toggle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-color);
+            color: var(--accent-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-2px) rotate(180deg);
+            box-shadow: 0 8px 20px var(--shadow-color);
+            background: var(--accent-primary);
+            color: var(--text-secondary);
+        }
+
+        .theme-toggle::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: var(--accent-primary);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+
+        .theme-toggle:hover::before {
+            width: 100%;
+            height: 100%;
+        }
+
+        .add-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--accent-primary);
+            border: 2px solid var(--accent-primary);
+            font-size: 2rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            box-shadow: 0 8px 20px var(--shadow-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .add-btn:hover {
+            transform: translateY(-2px) rotate(45deg);
+            box-shadow: 0 12px 25px var(--shadow-color);
+            background: var(--accent-secondary);
+        }
+
+        /* Added ripple effect for buttons */
+        .add-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s ease, height 0.3s ease;
+        }
+
+        .add-btn:active::after {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Fixed Dropdown Styles */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            z-index: 1000;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background: var(--bg-primary);
+            min-width: 200px;
+            box-shadow: 0 8px 16px var(--shadow-color);
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            backdrop-filter: var(--backdrop-blur);
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(-10px) scale(0.95);
+            top: 100%;
+            margin-top: 5px;
+        }
+
+        .dropdown-content.show {
+            display: block;
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0) scale(1);
+        }
+
+        .dropdown-content button {
+            color: var(--text-primary);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            font-size: 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', monospace;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dropdown-content button:hover {
+            background: var(--bg-secondary);
+            transform: translateX(5px);
+        }
+
+        .dropdown-content button::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 0;
+            height: 100%;
+            background: var(--accent-primary);
+            transition: width 0.3s ease;
+        }
+
+        .dropdown-content button:hover::before {
+            width: 3px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .post-form {
+            display: none;
+            background: var(--bg-tertiary);
+            backdrop-filter: var(--backdrop-blur);
+            padding: 30px;
+            position: relative;
+            border-radius: 20px;
+            color: var(--text-primary);
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px var(--shadow-color);
+            z-index: 1;
+            border: 2px solid var(--border-color);
+            /* Added slide-in animation */
+            animation: slideInFromTop 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            /* Enhanced form styling with gradient border */
+            position: relative;
+            overflow: hidden;
+        }
+
+        .post-form::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, var(--accent-primary), transparent, var(--accent-primary));
+            opacity: 0.1;
+            z-index: -1;
+            animation: gradientShift 3s ease-in-out infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { transform: translateX(-100%); }
+            50% { transform: translateX(100%); }
+        }
+
+        /* Added keyframe animations */
+        @keyframes slideInFromTop {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInFromBottom {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--accent-tertiary);
+            transition: color 0.3s ease;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 1rem;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent-secondary);
+            box-shadow: 0 0 15px var(--shadow-color);
+            transform: translateY(-2px);
+        }
+
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .poll-options {
+            display: none;
+        }
+
+        .option-input {
+            margin-bottom: 10px;
+            display: flex;
+            gap: 10px;
+            animation: slideInFromBottom 0.3s ease;
+        }
+
+        .option-input input {
+            flex: 1;
+        }
+
+        .remove-option {
+            background: var(--accent-primary);
+            color: var(--text-secondary);
+            border: none;
+            border-radius: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .remove-option:hover {
+            background: var(--accent-secondary);
+            transform: scale(1.1);
+        }
+
+        .add-option {
+            background: var(--accent-primary);
+            color: var(--text-secondary);
+            border: none;
+            border-radius: 8px;
+            padding: 10px 15px;
+            cursor: pointer;
+            margin-bottom: 15px;
+            font-family: 'Orbitron', monospace;
+            transition: all 0.3s ease;
+        }
+
+        .add-option:hover {
+            background: var(--accent-secondary);
+            transform: translateY(-2px);
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', monospace;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: var(--accent-primary);
+            color: var(--text-secondary);
+            border: 2px solid var(--accent-primary);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-secondary);
+            border-color: var(--accent-secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px var(--shadow-color);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-secondary);
+            transform: translateY(-2px);
+        }
+
+        .posts-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .post {
+            background: var(--bg-secondary);
+            backdrop-filter: var(--backdrop-blur);
+            border-radius: 20px;
+            border: 2px solid var(--border-color);
+            padding: 25px;
+            box-shadow: 0 8px 32px var(--shadow-color);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            z-index: 1;
+            /* Added staggered animation for posts */
+            animation: slideInFromBottom 0.5s ease;
+            /* Enhanced post styling with subtle glow */
+            overflow: hidden;
+        }
+
+        .post::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--accent-primary), transparent, var(--accent-primary));
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 22px;
+        }
+
+        .post:hover::before {
+            opacity: 0.3;
+        }
+
+        .post:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 50px var(--shadow-color);
+            border-color: var(--accent-secondary);
+        }
+
+        /* Enhanced post header with better typography */
+        .post-header {
+            color: var(--accent-primary);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 2px var(--shadow-color);
+            transition: all 0.3s ease;
+            position: relative;
+            display: inline-block;
+        }
+
+        .post-header::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-secondary);
+            transition: width 0.3s ease;
+        }
+
+        .post:hover .post-header {
+            color: var(--accent-secondary);
+            transform: translateX(5px);
+        }
+
+        .post:hover .post-header::after {
+            width: 100%;
+        }
+
+        .post-content {
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            line-height: 1.6;
+            transition: color 0.3s ease;
+        }
+
+        /* Fixed Poll Option Styles */
+        .poll-option {
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 15px;
+            margin: 10px 0;
+            width: 100%;
+            color: var(--text-primary);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Orbitron', monospace;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .poll-option::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 0;
+            height: 100%;
+            background: var(--accent-primary);
+            transition: width 0.3s ease;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .poll-option:hover {
+            transform: translateX(5px);
+            border-color: var(--accent-secondary);
+        }
+
+        .poll-option:hover::before {
+            width: 100%;
+        }
+
+        .poll-option:disabled {
+            background: rgba(128, 128, 128, 0.1);
+            border-color: #666;
+            cursor: not-allowed;
+            color: #888;
+        }
+
+        .poll-votes {
+            background: var(--accent-primary);
+            color: var(--text-secondary);
+            border-radius: 8px;
+            padding: 4px 8px;
+            font-size: 0.9rem;
+            border: 1px solid var(--accent-primary);
+            transition: all 0.3s ease;
+        }
+
+        .poll-option:hover .poll-votes {
+            animation: pulse 0.5s ease;
+        }
+
+        .replies-section {
+            display: none;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            animation: slideInFromTop 0.3s ease;
+        }
+
+        .reply-form {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .reply-form textarea {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Orbitron', monospace;
+            resize: vertical;
+            min-height: 80px;
+            transition: all 0.3s ease;
+        }
+
+        .reply-form textarea:focus {
+            outline: none;
+            border-color: var(--accent-secondary);
+            box-shadow: 0 0 10px var(--shadow-color);
+            transform: translateY(-2px);
+        }
+
+        .reply-form .btn {
+            height: fit-content;
+            padding: 12px 20px;
+        }
+
+        .reply {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .reply:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px var(--shadow-color);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: var(--accent-primary);
+            font-size: 1.2rem;
+            font-weight: bold;
+            animation: pulse 1s infinite;
+            position: relative;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 50px;
+            height: 2px;
+            background: var(--accent-primary);
+            transform: translateX(-50%);
+            animation: loadingBar 1.5s ease-in-out infinite;
+        }
+
+        @keyframes loadingBar {
+            0%, 100% { width: 20px; opacity: 0.5; }
+            50% { width: 80px; opacity: 1; }
+        }
+
+        /* Added scroll-to-top button */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--accent-primary);
+            color: var(--text-secondary);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 1000;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scroll-to-top::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.3s ease;
+        }
+
+        .scroll-to-top:hover::before {
+            width: 100%;
+            height: 100%;
+        }
+
+        .scroll-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+            animation: bounceIn 0.5s ease;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .scroll-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px var(--shadow-color);
+            background: var(--accent-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 1.1rem;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            .post-form {
+                padding: 20px;
+            }
+            
+            .dropdown-content {
+                right: -10px;
+                min-width: 180px;
+            }
+            
+            .header-controls {
+                gap: 10px;
+            }
+            
+            .theme-toggle {
+                width: 45px;
+                height: 45px;
+                font-size: 1rem;
+            }
+            
+            .add-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+
+            .watermark {
+                width: 200px;
+                height: 200px;
+                opacity: 0.02;
+            }
+
+            .scroll-to-top {
+                bottom: 20px;
+                right: 20px;
+                width: 45px;
+                height: 45px;
+                font-size: 1.1rem;
+            }
+        }
+
+        /* Added reply count styling */
+        .reply-count {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--accent-secondary);
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-top: 10px;
+            padding: 5px 10px;
+            background: var(--bg-tertiary);
+            border-radius: 15px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .reply-count:hover {
+            background: var(--accent-primary);
+            color: var(--bg-primary);
+            transform: scale(1.05);
+        }
+
+        .reply-count::before {
+            content: '💬';
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Added watermark element -->
+    <div class="watermark"></div>
+    
+    <div class="header">
+        <div class="logo">SEW ASK</div>
+        <!-- Added header controls container with theme toggle -->
+        <div class="header-controls">
+            <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+                <span id="theme-icon">🌙</span>
+            </button>
+            <div class="dropdown">
+                <button class="add-btn" onclick="toggleDropdown()">+</button>
+                <div id="dropdown" class="dropdown-content">
+                    <button onclick="showTextForm()">Text</button>
+                    <button onclick="showPollForm()">Poll</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Text Post Form -->
+        <div id="textForm" class="post-form">
+            <h2 style="color: var(--accent-primary); margin-bottom: 20px; font-weight: bold;">Create Text Post</h2>
+            <div class="form-group">
+                <label for="textTitle">Title</label>
+                <input type="text" id="textTitle" placeholder="Enter your title...">
+            </div>
+            <div class="form-group">
+                <label for="textContent">Content</label>
+                <textarea id="textContent" placeholder="Write your thoughts..."></textarea>
+            </div>
+            <div class="form-buttons">
+                <button class="btn btn-primary" onclick="submitTextPost()">Post</button>
+                <button class="btn btn-secondary" onclick="hideForm()">Cancel</button>
+            </div>
+        </div>
+
+        <!-- Poll Form -->
+        <div id="pollForm" class="post-form">
+            <h2 style="color: var(--accent-primary); margin-bottom: 20px; font-weight: bold;">Create Poll</h2>
+            <div class="form-group">
+                <label for="pollTitle">Poll Question</label>
+                <input type="text" id="pollTitle" placeholder="What's your question?">
+            </div>
+            <div class="form-group poll-options">
+                <label>Options</label>
+                <div id="pollOptions">
+                    <div class="option-input">
+                        <input type="text" placeholder="Option 1" class="poll-option-input">
+                    </div>
+                    <div class="option-input">
+                        <input type="text" placeholder="Option 2" class="poll-option-input">
+                    </div>
+                </div>
+                <button type="button" class="add-option" onclick="addPollOption()">+ Add Option</button>
+            </div>
+            <div class="form-buttons">
+                <button class="btn btn-primary" onclick="submitPoll()">Create Poll</button>
+                <button class="btn btn-secondary" onclick="hideForm()">Cancel</button>
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <div id="loading" class="loading" style="display: none;">Loading posts...</div>
+
+        <!-- Posts Container -->
+        <div id="postsContainer" class="posts-container"></div>
+    </div>
+
+    <!-- Added scroll to top button -->
+    <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top">
+        ↑
+    </button>
+
+<!-- Firebase Scripts -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js';
+        import { getDatabase, ref, push, onValue, get, update } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDS3K9EKXiBcXux7H70EPdCFM7-_ZclLKc",
+            authDomain: "sewask-e3b44.firebaseapp.com",
+            databaseURL: "https://sewask-e3b44-default-rtdb.firebaseio.com",
+            projectId: "sewask-e3b44",
+            storageBucket: "sewask-e3b44.firebasestorage.app",
+            messagingSenderId: "1060036881709",
+            appId: "1:1060036881709:web:a6e5afd2c799b0ee9177a4",
+            measurementId: "G-SYELD4CCST"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Make functions globally available
+        window.database = database;
+        window.ref = ref;
+        window.push = push;
+        window.onValue = onValue;
+        window.get = get;
+        window.update = update;
+
+        // Load posts on page load
+        loadPosts();
+    </script>
+
+    <script>
+        let currentOpenPost = null;
+
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('theme-icon');
+            const watermark = document.querySelector('.watermark');
+            
+            if (body.getAttribute('data-theme') === 'light') {
+                body.removeAttribute('data-theme');
+                themeIcon.textContent = '🌙';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.setAttribute('data-theme', 'light');
+                themeIcon.textContent = '☀️';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        let scrollTimeout;
+        window.addEventListener('scroll', function() {
+            if (scrollTimeout) {
+                clearTimeout(scrollTimeout);
+            }
+            
+            scrollTimeout = setTimeout(function() {
+                const scrollButton = document.querySelector('.scroll-to-top');
+                if (window.pageYOffset > 300) {
+                    scrollButton.classList.add('visible');
+                } else {
+                    scrollButton.classList.remove('visible');
+                }
+            }, 10);
+        });
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Show/hide scroll to top button
+        function handleScroll() {
+            const scrollButton = document.querySelector('.scroll-to-top');
+            if (window.pageYOffset > 300) {
+                scrollButton.classList.add('visible');
+            } else {
+                scrollButton.classList.remove('visible');
+            }
+        }
+
+        // Initialize theme and scroll handler
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTheme();
+            window.addEventListener('scroll', handleScroll);
+        });
+
+        function toggleDropdown() {
+            document.getElementById("dropdown").classList.toggle("show");
+        }
+
+        function showTextForm() {
+            hideForm();
+            const textForm = document.getElementById("textForm");
+            textForm.style.display = "block";
+            textForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            document.getElementById("dropdown").classList.remove("show");
+        }
+
+        function showPollForm() {
+            hideForm();
+            const pollForm = document.getElementById("pollForm");
+            pollForm.style.display = "block";
+            document.querySelector(".poll-options").style.display = "block";
+            pollForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            document.getElementById("dropdown").classList.remove("show");
+        }
+
+        function hideForm() {
+            document.getElementById("textForm").style.display = "none";
+            document.getElementById("pollForm").style.display = "none";
+            // Clear forms
+            document.getElementById("textTitle").value = "";
+            document.getElementById("textContent").value = "";
+            document.getElementById("pollTitle").value = "";
+            document.querySelectorAll(".poll-option-input").forEach(input => input.value = "");
+        }
+
+        function addPollOption() {
+            const optionsContainer = document.getElementById("pollOptions");
+            const optionDiv = document.createElement("div");
+            optionDiv.className = "option-input";
+            
+            const optionCount = optionsContainer.children.length + 1;
+            optionDiv.innerHTML = `
+                <input type="text" placeholder="Option ${optionCount}" class="poll-option-input">
+                <button type="button" class="remove-option" onclick="removeOption(this)">✕</button>
+            `;
+            
+            optionsContainer.appendChild(optionDiv);
+        }
+
+        function removeOption(button) {
+            const optionDiv = button.parentElement;
+            optionDiv.style.animation = 'fadeOut 0.3s ease';
+            setTimeout(() => {
+                optionDiv.remove();
+            }, 300);
+        }
+
+        async function submitTextPost() {
+            const title = document.getElementById("textTitle").value.trim();
+            const content = document.getElementById("textContent").value.trim();
+
+            if (!title || !content) {
+                alert("Please fill in both title and content");
+                return;
+            }
+
+            try {
+                const postsRef = window.ref(window.database, 'posts');
+                await window.push(postsRef, {
+                    type: 'text',
+                    title: title,
+                    content: content,
+                    timestamp: Date.now(),
+                    replies: {}
+                });
+
+                hideForm();
+                loadPosts();
+                showNotification('Post created successfully!', 'success');
+            } catch (error) {
+                console.error("Error posting:", error);
+                alert("Error posting. Please try again.");
+            }
+        }
+
+        async function submitPoll() {
+            const title = document.getElementById("pollTitle").value.trim();
+            const optionInputs = document.querySelectorAll(".poll-option-input");
+            const options = [];
+
+            optionInputs.forEach(input => {
+                if (input.value.trim()) {
+                    options.push({
+                        text: input.value.trim(),
+                        votes: 0
+                    });
+                }
+            });
+
+            if (!title || options.length < 2) {
+                alert("Please provide a question and at least 2 options");
+                return;
+            }
+
+            try {
+                const postsRef = window.ref(window.database, 'posts');
+                await window.push(postsRef, {
+                    type: 'poll',
+                    title: title,
+                    options: options,
+                    timestamp: Date.now(),
+                    totalVotes: 0
+                });
+
+                hideForm();
+                loadPosts();
+                showNotification('Poll created successfully!', 'success');
+            } catch (error) {
+                console.error("Error creating poll:", error);
+                alert("Error creating poll. Please try again.");
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: var(--accent-primary);
+                color: var(--text-secondary);
+                padding: 15px 20px;
+                border-radius: 12px;
+                box-shadow: 0 8px 25px var(--shadow-color);
+                z-index: 10000;
+                font-family: 'Orbitron', monospace;
+                font-weight: bold;
+                animation: slideInFromTop 0.3s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        function loadPosts() {
+            document.getElementById("loading").style.display = "block";
+            const postsRef = window.ref(window.database, 'posts');
+            
+            window.onValue(postsRef, (snapshot) => {
+                const posts = snapshot.val();
+                displayPosts(posts);
+                document.getElementById("loading").style.display = "none";
+            });
+        }
+
+        function displayPosts(posts) {
+            const container = document.getElementById("postsContainer");
+            container.innerHTML = "";
+
+            if (!posts) {
+                container.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--accent-primary); font-weight: bold;">No posts yet. Be the first to post!</div>';
+                return;
+            }
+
+            // Convert to array and sort by timestamp
+            const postsArray = Object.entries(posts).map(([id, post]) => ({
+                id,
+                ...post
+            })).sort((a, b) => b.timestamp - a.timestamp);
+
+            postsArray.forEach((post, index) => {
+                setTimeout(() => {
+                    const postElement = createPostElement(post);
+                    container.appendChild(postElement);
+                }, index * 100);
+            });
+        }
+
+        function createPostElement(post) {
+            const postDiv = document.createElement("div");
+            postDiv.className = "post";
+            postDiv.setAttribute("data-post-id", post.id);
+
+            const replyCount = post.replies ? Object.keys(post.replies).length : 0;
+
+            if (post.type === 'text') {
+                postDiv.innerHTML = `
+                    <div class="post-header">${post.title}</div>
+                    <div class="post-content">${post.content}</div>
+                    <div class="reply-count">${replyCount} ${replyCount === 1 ? 'reply' : 'replies'}</div>
+                    <div class="replies-section" id="replies-${post.id}">
+                        <div class="reply-form">
+                            <textarea placeholder="Write a reply..." id="reply-input-${post.id}"></textarea>
+                            <button class="btn btn-primary" onclick="submitReply('${post.id}')">Reply</button>
+                        </div>
+                        <div id="replies-list-${post.id}"></div>
+                    </div>
+                `;
+
+                postDiv.addEventListener('click', (e) => {
+                    if (e.target.tagName !== 'TEXTAREA' && e.target.tagName !== 'BUTTON') {
+                        toggleReplies(post.id);
+                    }
+                });
+
+                // Load replies if they exist
+                if (post.replies) {
+                    setTimeout(() => loadReplies(post.id, post.replies), 100);
+                }
+            } else if (post.type === 'poll') {
+                const optionsHtml = post.options.map((option, index) => `
+                    <button class="poll-option" onclick="voteOnPoll('${post.id}', ${index})" id="poll-option-${post.id}-${index}">
+                        <span>${option.text}</span>
+                        <span class="vote-count">${option.votes || 0} votes</span>
+                    </button>
+                `).join('');
+
+                postDiv.innerHTML = `
+                    <div class="post-header">${post.title}</div>
+                    <div class="post-content">
+                        ${optionsHtml}
+                        <div class="reply-count">${replyCount} ${replyCount === 1 ? 'reply' : 'replies'}</div>
+                        <div class="replies-section" id="replies-${post.id}">
+                            <div class="reply-form">
+                                <textarea placeholder="Write a reply..." id="reply-input-${post.id}"></textarea>
+                                <button class="btn btn-primary" onclick="submitReply('${post.id}')">Reply</button>
+                            </div>
+                            <div id="replies-list-${post.id}"></div>
+                        </div>
+                    </div>
+                `;
+
+                postDiv.addEventListener('click', (e) => {
+                    if (e.target.tagName !== 'TEXTAREA' && e.target.tagName !== 'BUTTON' && !e.target.classList.contains('poll-option')) {
+                        toggleReplies(post.id);
+                    }
+                });
+
+                // Load replies if they exist
+                if (post.replies) {
+                    setTimeout(() => loadReplies(post.id, post.replies), 100);
+                }
+            }
+
+            return postDiv;
+        }
+
+        function toggleReplies(postId) {
+            const repliesSection = document.getElementById(`replies-${postId}`);
+            
+            // Close other open replies
+            if (currentOpenPost && currentOpenPost !== postId) {
+                document.getElementById(`replies-${currentOpenPost}`).style.display = "none";
+            }
+
+            if (repliesSection.style.display === "block") {
+                repliesSection.style.display = "none";
+                currentOpenPost = null;
+            } else {
+                repliesSection.style.display = "block";
+                currentOpenPost = postId;
+                repliesSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        async function submitReply(postId) {
+            const replyInput = document.getElementById(`reply-input-${postId}`);
+            const replyText = replyInput.value.trim();
+
+            if (!replyText) {
+                alert("Please write a reply");
+                return;
+            }
+
+            try {
+                const replyRef = window.ref(window.database, `posts/${postId}/replies`);
+                await window.push(replyRef, {
+                    content: replyText,
+                    timestamp: Date.now()
+                });
+
+                replyInput.value = "";
+                showNotification('Reply posted!', 'success');
+                
+                // Update reply count display
+                updateReplyCount(postId);
+            } catch (error) {
+                console.error("Error posting reply:", error);
+                alert("Error posting reply. Please try again.");
+            }
+        }
+
+        function updateReplyCount(postId) {
+            const postRef = window.ref(window.database, `posts/${postId}`);
+            window.onValue(postRef, (snapshot) => {
+                const post = snapshot.val();
+                if (post) {
+                    const replyCount = post.replies ? Object.keys(post.replies).length : 0;
+                    const replyCountElement = document.querySelector(`[data-post-id="${postId}"] .reply-count`);
+                    if (replyCountElement) {
+                        replyCountElement.textContent = `${replyCount} ${replyCount === 1 ? 'reply' : 'replies'}`;
+                    }
+                }
+            }, { onlyOnce: true });
+        }
+
+        function loadReplies(postId, replies) {
+            const repliesList = document.getElementById(`replies-list-${postId}`);
+            if (!repliesList) return;
+
+            repliesList.innerHTML = "";
+
+            if (replies) {
+                const repliesArray = Object.values(replies).sort((a, b) => a.timestamp - b.timestamp);
+                
+                repliesArray.forEach(reply => {
+                    const replyDiv = document.createElement("div");
+                    replyDiv.className = "reply";
+                    replyDiv.innerHTML = `<div>${reply.content}</div>`;
+                    repliesList.appendChild(replyDiv);
+                });
+            }
+        }
+
+        async function voteOnPoll(postId, optionIndex) {
+            // Check if user has already voted
+            const hasVoted = localStorage.getItem(`voted-${postId}`);
+            if (hasVoted) {
+                alert("You have already voted on this poll!");
+                return;
+            }
+
+            try {
+                const postRef = window.ref(window.database, `posts/${postId}`);
+                const snapshot = await window.get(postRef);
+                const post = snapshot.val();
+
+                if (post && post.options && post.options[optionIndex]) {
+                    const updates = {};
+                    updates[`posts/${postId}/options/${optionIndex}/votes`] = (post.options[optionIndex].votes || 0) + 1;
+                    updates[`posts/${postId}/totalVotes`] = (post.totalVotes || 0) + 1;
+
+                    await window.update(window.ref(window.database), updates);
+
+                    // Mark as voted
+                    localStorage.setItem(`voted-${postId}`, 'true');
+
+                    // Disable all options for this poll
+                    const pollOptions = document.querySelectorAll(`[id^="poll-option-${postId}-"]`);
+                    pollOptions.forEach(option => {
+                        option.disabled = true;
+                        option.style.cursor = 'not-allowed';
+                        option.style.background = 'rgba(128, 128, 128, 0.1)';
+                        option.style.borderColor = '#666';
+                        option.style.color = '#888';
+                    });
+
+                    showNotification('Vote recorded!', 'success');
+                }
+            } catch (error) {
+                console.error("Error voting:", error);
+                alert("Error voting. Please try again.");
+            }
+        }
+
+        // Close dropdown when clicking outside
+        window.onclick = function(event) {
+            if (!event.target.matches('.add-btn')) {
+                const dropdown = document.getElementById("dropdown");
+                if (dropdown.classList.contains('show')) {
+                    dropdown.classList.remove('show');
+                }
+            }
+        }
+
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeOut {
+                from { opacity: 1; transform: translateY(0); }
+                to { opacity: 0; transform: translateY(-10px); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
+</merged_code>
